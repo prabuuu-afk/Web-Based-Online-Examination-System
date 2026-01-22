@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Staff Dashboard | Online Examination System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: "Segoe UI", sans-serif;
+            background: #f4f7fc;
+        }
+
+        .header {
+            background: #2c3e50;
+            color: white;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 22px;
+        }
+
+        .header a {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            background: #e74c3c;
+            padding: 8px 14px;
+            border-radius: 6px;
+        }
+
+        .container {
+            padding: 40px;
+        }
+
+        .welcome {
+            font-size: 24px;
+            margin-bottom: 30px;
+            color: #2c3e50;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 25px;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+        }
+
+        .card h3 {
+            margin-bottom: 10px;
+            color: #4a90e2;
+        }
+
+        .card p {
+            color: #555;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+    <h1>Staff Dashboard</h1>
+    <a href="{{ url_for('logout') }}">Logout</a>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="container">
+    <div class="welcome">
+        Welcome, <strong>{{ session['staff'] }}</strong> 👋
+    </div>
+
+    <div class="cards">
+
+        <!-- ADD STUDENT -->
+        <a href="{{ url_for('add_student') }}" class="card">
+            <h3>➕ Add Student</h3>
+            <p>Create student accounts</p>
+        </a>
+
+        <!-- VIEW STUDENTS -->
+        <a href="{{ url_for('view_students') }}" class="card">
+            <h3>👁 View Students</h3>
+            <p>Edit or delete students</p>
+        </a>
+
+        <!-- CREATE EXAM -->
+        <a href="{{ url_for('create_exam') }}" class="card">
+            <h3>📝 Create Exam</h3>
+            <p>Create and publish exams</p>
+        </a>
+
+        <!-- RESULTS -->
+        <div class="card">
+            <h3>📊 Results</h3>
+            <p>View student performance (Next)</p>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

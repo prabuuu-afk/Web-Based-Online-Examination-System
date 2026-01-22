@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>View Students | Online Examination System</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: "Segoe UI", sans-serif;
+            background: #f4f7fc;
+        }
+
+        .container {
+            padding: 40px;
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 25px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+        }
+
+        th, td {
+            padding: 14px 18px;
+            text-align: left;
+        }
+
+        th {
+            background: #4a90e2;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background: #f9fbff;
+        }
+
+        tr:hover {
+            background: #eef3fc;
+        }
+
+        .actions a, .actions button {
+            font-size: 14px;
+            padding: 6px 10px;
+            border-radius: 5px;
+            margin-right: 6px;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .edit {
+            background: #f1c40f;
+            color: black;
+        }
+
+        .delete {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 16px;
+            background: #4a90e2;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            margin-right: 10px;
+        }
+
+        .btn:hover {
+            background: #357abd;
+        }
+
+        .danger {
+            background: #c0392b;
+        }
+
+        .danger:hover {
+            background: #922b21;
+        }
+
+        .bottom-actions {
+            margin-top: 25px;
+            text-align: right;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 25px;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <h1>Registered Students</h1>
+
+    <div class="top-actions">
+        <a class="btn" href="{{ url_for('add_student') }}">➕ Add Student</a>
+        <a class="btn" href="{{ url_for('staff_dashboard') }}">⬅ Back</a>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Student ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% if students %}
+                {% for s in students %}
+                <tr>
+                    <td>{{ s.id }}</td>
+                    <td>{{ s.name }}</td>
+                    <td>{{ s.email }}</td>
+                    <td class="actions">
+                        <a class="edit" href="{{ url_for('edit_student', sid=s.id) }}">Edit</a>
+                        <form method="POST"
+                              action="{{ url_for('delete_student', sid=s.id) }}"
+                              style="display:inline;"
+                              onsubmit="return confirm('Delete this student?');">
+                            <button type="submit" class="delete">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="4" class="empty">No students found</td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+
+    {% if students %}
+    <div class="bottom-actions">
+        <form method="POST"
+              action="{{ url_for('delete_all_students') }}"
+              onsubmit="return confirm('⚠️ Delete ALL students permanently?');">
+            <button type="submit" class="btn danger">🗑 Delete All Students</button>
+        </form>
+    </div>
+    {% endif %}
+
+</div>
+
+</body>
+</html>

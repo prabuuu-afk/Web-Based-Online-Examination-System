@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Exam</title>
+
+    <style>
+        body {
+            background: #f4f7fc;
+            font-family: "Segoe UI", sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .box {
+            background: white;
+            padding: 40px;
+            width: 420px;
+            border-radius: 14px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 14px;
+            margin-bottom: 16px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background: #4a90e2;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #357abd;
+        }
+
+        a {
+            display: block;
+            text-align: center;
+            margin-top: 15px;
+            text-decoration: none;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+
+<div class="box">
+    <h2>Create New Exam</h2>
+
+    <form method="POST">
+        <input type="text" name="title" placeholder="Exam Title" required>
+        <textarea name="description" placeholder="Exam Description"></textarea>
+        <input type="number" name="duration" placeholder="Duration (minutes)" required>
+
+        <button type="submit">Create Exam</button>
+    </form>
+
+    <a href="{{ url_for('staff_dashboard') }}">← Back to Dashboard</a>
+</div>
+
+</body>
+</html>
