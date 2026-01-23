@@ -41,14 +41,23 @@
 
         .welcome {
             font-size: 24px;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             color: #2c3e50;
+        }
+
+        .flash {
+            background: #dff0d8;
+            color: #3c763d;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 25px;
         }
 
         .cards {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
             gap: 25px;
+            margin-bottom: 50px;
         }
 
         .card {
@@ -75,6 +84,38 @@
             color: #555;
             font-size: 14px;
         }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 14px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background: #4a90e2;
+            color: white;
+        }
+
+        .delete-btn {
+            background: #e74c3c;
+            border: none;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .delete-btn:hover {
+            background: #c0392b;
+        }
     </style>
 </head>
 <body>
@@ -87,37 +128,76 @@
 
 <!-- MAIN CONTENT -->
 <div class="container">
+
     <div class="welcome">
         Welcome, <strong>{{ session['staff'] }}</strong> 👋
     </div>
 
+    <!-- FLASH MESSAGE -->
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for msg in messages %}
+          <div class="flash">{{ msg }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <!-- CARDS -->
     <div class="cards">
 
-        <!-- ADD STUDENT -->
         <a href="{{ url_for('add_student') }}" class="card">
             <h3>➕ Add Student</h3>
             <p>Create student accounts</p>
         </a>
 
-        <!-- VIEW STUDENTS -->
         <a href="{{ url_for('view_students') }}" class="card">
             <h3>👁 View Students</h3>
             <p>Edit or delete students</p>
         </a>
 
-        <!-- CREATE EXAM -->
         <a href="{{ url_for('create_exam') }}" class="card">
             <h3>📝 Create Exam</h3>
             <p>Create and publish exams</p>
         </a>
 
-        <!-- RESULTS -->
         <div class="card">
             <h3>📊 Results</h3>
             <p>View student performance (Next)</p>
         </div>
 
     </div>
+
+    <!-- AVAILABLE EXAMS -->
+    <h2>Available Exams</h2>
+
+    <table>
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Duration (mins)</th>
+            <th>Created By</th>
+            <th>Action</th>
+        </tr>
+
+        {% for exam in exams %}
+        <tr>
+            <td>{{ exam.title }}</td>
+            <td>{{ exam.description }}</td>
+            <td>{{ exam.duration }}</td>
+            <td>{{ exam.created_by }}</td>
+            <td>
+                <form method="POST" action="{{ url_for('delete_exam', exam_id=exam.id) }}">
+                    <button class="delete-btn" type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="5">No exams created yet</td>
+        </tr>
+        {% endfor %}
+    </table>
+
 </div>
 
 </body>

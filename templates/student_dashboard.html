@@ -1,40 +1,110 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>Student Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <style>
         body {
+            margin: 0;
+            font-family: "Segoe UI", sans-serif;
             background: #f4f7fc;
-            font-family: Segoe UI;
+        }
+
+        .header {
+            background: #2c3e50;
+            color: white;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 22px;
+        }
+
+        .header a {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            background: #e74c3c;
+            padding: 8px 14px;
+            border-radius: 6px;
+        }
+
+        .container {
             padding: 40px;
         }
-        h1 {
+
+        .welcome {
+            font-size: 24px;
+            margin-bottom: 30px;
             color: #2c3e50;
         }
-        a {
-            display: inline-block;
-            margin-top: 20px;
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 25px;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+            text-align: center;
             text-decoration: none;
+            color: inherit;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+        }
+
+        .card h3 {
+            margin-bottom: 10px;
             color: #4a90e2;
+        }
+
+        .card p {
+            color: #555;
+            font-size: 14px;
         }
     </style>
 </head>
 <body>
 
-<h1>Welcome, {{ name }} 👋</h1>
-<p>You have successfully logged in.</p>
+<!-- HEADER -->
+<div class="header">
+    <h1>Student Dashboard</h1>
+    <a href="{{ url_for('logout') }}">Logout</a>
+</div>
 
-<a href="{{ url_for('logout') }}" style="color: red;">Logout</a>
+<!-- MAIN CONTENT -->
+<div class="container">
+    <div class="welcome">
+        Welcome, <strong>{{ student_name }}</strong> 👋
+    </div>
 
-<a href="{{ url_for('change_student_password') }}" class="card">
-    <h3>🔐 Change Password</h3>
-    <p>Update your login credentials</p>
-</a>
-<a href="{{ url_for('student_exams') }}" class="card">
-    <h3>📝 Available Exams</h3>
-    <p>View and start your exams</p>
-</a>
+    <div class="cards">
 
+        <a href="{{ url_for('change_student_password') }}" class="card">
+            <h3>🔐 Change Password</h3>
+            <p>Update your login credentials</p>
+        </a>
+
+        <a href="{{ url_for('student_exams') }}" class="card">
+            <h3>📝 Available Exams</h3>
+            <p>View and attend exams</p>
+        </a>
+
+    </div>
+</div>
 
 </body>
 </html>

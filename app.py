@@ -51,9 +51,14 @@ def staff_dashboard():
     if "staff" not in session:
         return redirect(url_for("staff_login"))
 
-    return render_template("staff_dashboard.html")
+    db = get_db()
+    exams = db.execute("SELECT * FROM exams").fetchall()
+    db.close()
+
+    return render_template("staff_dashboard.html", exams=exams)
 
 
+# ------------------ ADD STUDENT ------------------
 @app.route("/staff/add-student", methods=["GET", "POST"])
 def add_student():
     if "staff" not in session:
@@ -77,7 +82,7 @@ def add_student():
 
         db.execute(
             "INSERT INTO students (id, name, email, password) VALUES (?, ?, ?, ?)",
-            (sid, name, email, sid)  # default password = student ID
+            (sid, name, email, sid)
         )
         db.commit()
         db.close()
@@ -88,18 +93,20 @@ def add_student():
     return render_template("add_student.html")
 
 
+# ------------------ VIEW STUDENTS ------------------
 @app.route("/staff/view-students")
 def view_students():
     if "staff" not in session:
         return redirect(url_for("staff_login"))
 
     db = get_db()
-    students = db.execute("SELECT id, name, email FROM students").fetchall()
+    students = db.execute("SELECT * FROM students").fetchall()
     db.close()
 
     return render_template("view_students.html", students=students)
 
 
+# ------------------ EDIT STUDENT ------------------
 @app.route("/staff/edit-student/<sid>", methods=["GET", "POST"])
 def edit_student(sid):
     if "staff" not in session:
@@ -110,16 +117,6 @@ def edit_student(sid):
     if request.method == "POST":
         name = request.form.get("student_name")
         email = request.form.get("student_email")
-
-        exists = db.execute(
-            "SELECT * FROM students WHERE email=? AND id!=?",
-            (email, sid)
-        ).fetchone()
-
-        if exists:
-            db.close()
-            flash("Email already exists")
-            return redirect(url_for("edit_student", sid=sid))
 
         db.execute(
             "UPDATE students SET name=?, email=? WHERE id=?",
@@ -140,6 +137,7 @@ def edit_student(sid):
     return render_template("edit_student.html", student=student)
 
 
+# ------------------ DELETE STUDENT ------------------
 @app.route("/staff/delete-student/<sid>", methods=["POST"])
 def delete_student(sid):
     if "staff" not in session:
@@ -154,20 +152,7 @@ def delete_student(sid):
     return redirect(url_for("view_students"))
 
 
-@app.route("/staff/delete-all-students", methods=["POST"])
-def delete_all_students():
-    if "staff" not in session:
-        return redirect(url_for("staff_login"))
-
-    db = get_db()
-    db.execute("DELETE FROM students")
-    db.commit()
-    db.close()
-
-    flash("All students deleted")
-    return redirect(url_for("view_students"))
-
-
+# ------------------ CREATE EXAM ------------------
 @app.route("/staff/create-exam", methods=["GET", "POST"])
 def create_exam():
     if "staff" not in session:
@@ -175,13 +160,20 @@ def create_exam():
 
     if request.method == "POST":
         title = request.form.get("title")
+        description = request.form.get("description")
+        duration = request.form.get("duration")
+        created_by = session["staff"]
 
         db = get_db()
-        db.execute("INSERT INTO exams (title) VALUES (?)", (title,))
+        db.execute(
+            "INSERT INTO exams (title, description, duration, created_by) VALUES (?, ?, ?, ?)",
+            (title, description, duration, created_by)
+        )
         db.commit()
         db.close()
 
-        flash("Exam created successfully")
+        flash("✅ Exam created successfully")
+        return redirect(url_for("staff_dashboard"))
 
     return render_template("create_exam.html")
 
@@ -217,10 +209,20 @@ def student_dashboard():
     if "student" not in session:
         return redirect(url_for("student_login"))
 
-    return render_template("student_dashboard.html")
+    db = get_db()
+    student = db.execute(
+        "SELECT name FROM students WHERE id=?",
+        (session["student"],)
+    ).fetchone()
+    db.close()
+
+    return render_template(
+        "student_dashboard.html",
+        student_name=student["name"]
+    )
 
 
-# ✅ THIS ROUTE WAS MISSING (ROOT CAUSE)
+# ------------------ CHANGE PASSWORD (FIXED) ------------------
 @app.route("/student/change-password", methods=["GET", "POST"])
 def change_student_password():
     if "student" not in session:
@@ -243,7 +245,7 @@ def change_student_password():
 
         if not student:
             db.close()
-            flash("Old password is incorrect")
+            flash("Old password incorrect")
             return redirect(url_for("change_student_password"))
 
         db.execute(
@@ -260,6 +262,7 @@ def change_student_password():
     return render_template("change_student_password.html")
 
 
+# ------------------ STUDENT EXAMS ------------------
 @app.route("/student/exams")
 def student_exams():
     if "student" not in session:

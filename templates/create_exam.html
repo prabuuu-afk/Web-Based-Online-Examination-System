@@ -35,6 +35,11 @@
             border: 1px solid #ccc;
         }
 
+        textarea {
+            resize: none;
+            height: 90px;
+        }
+
         button {
             width: 100%;
             padding: 14px;
@@ -66,7 +71,9 @@
 
     <form method="POST">
         <input type="text" name="title" placeholder="Exam Title" required>
+
         <textarea name="description" placeholder="Exam Description"></textarea>
+
         <input type="number" name="duration" placeholder="Duration (minutes)" required>
 
         <button type="submit">Create Exam</button>
