@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Exam Questions</title>
+    <style>
+        body {
+            background: #f4f7fc;
+            font-family: Segoe UI;
+            padding: 40px;
+        }
+        .box {
+            background: white;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+        }
+        .btn {
+            padding: 8px 14px;
+            background: #4a90e2;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+<body>
+
+<h2>{{ exam.title }} – Questions</h2>
+
+<a class="btn" href="{{ url_for('add_question', exam_id=exam.id) }}">➕ Add Question</a>
+<a class="btn" href="{{ url_for('staff_dashboard') }}">⬅ Back</a>
+
+<hr>
+
+{% for q in questions %}
+<div class="box">
+    <b>{{ loop.index }}. {{ q.question }}</b>
+    <p><i>Type:</i> {{ q.question_type }}</p>
+
+    {% if q.question_type == 'mcq' %}
+        <p>A) {{ q.option_a }}</p>
+        <p>B) {{ q.option_b }}</p>
+        <p>C) {{ q.option_c }}</p>
+        <p>D) {{ q.option_d }}</p>
+    {% endif %}
+
+    <p><b>Correct Answer:</b> {{ q.correct_answer }}</p>
+</div>
+{% else %}
+<p>No questions added yet.</p>
+{% endfor %}
+
+</body>
+</html>

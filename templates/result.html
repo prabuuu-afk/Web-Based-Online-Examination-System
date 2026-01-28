@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Exam Result</title>
+    <style>
+        body {
+            background: #f4f7fc;
+            font-family: Segoe UI;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .box {
+            background: white;
+            padding: 40px;
+            border-radius: 14px;
+            width: 400px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        h1 {
+            color: #2c3e50;
+        }
+        .score {
+            font-size: 32px;
+            margin: 20px 0;
+            color: #27ae60;
+        }
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            text-decoration: none;
+            color: #4a90e2;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="box">
+    <h1>🎉 Result</h1>
+
+    <div class="score">
+        {{ result.score }} / {{ result.total }}
+    </div>
+
+    <a href="{{ url_for('student_dashboard') }}">⬅ Back to Dashboard</a>
+</div>
+
+</body>
+</html>

@@ -186,10 +186,18 @@
             <td>{{ exam.duration }}</td>
             <td>{{ exam.created_by }}</td>
             <td>
-                <form method="POST" action="{{ url_for('delete_exam', exam_id=exam.id) }}">
+                <a href="{{ url_for('view_questions', exam_id=exam.id) }}"
+                style="padding:6px 10px;background:#27ae60;color:white;border-radius:6px;text-decoration:none;">
+                    Questions
+                </a>
+
+                <form method="POST"
+                    action="{{ url_for('delete_exam', exam_id=exam.id) }}"
+                    style="display:inline;">
                     <button class="delete-btn" type="submit">Delete</button>
                 </form>
             </td>
+
         </tr>
         {% else %}
         <tr>

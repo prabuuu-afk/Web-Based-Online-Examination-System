@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Start Exam</title>
+    <style>
+        body {
+            font-family: Segoe UI;
+            background: #f4f7fc;
+            padding: 40px;
+        }
+        .box {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 800px;
+            margin: auto;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #2c3e50;
+        }
+        .q {
+            margin-bottom: 25px;
+        }
+        label {
+            display: block;
+            margin: 8px 0;
+            cursor: pointer;
+        }
+        button {
+            padding: 14px 24px;
+            background: #4a90e2;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #357abd;
+        }
+    </style>
+</head>
+<body>
+
+<div class="box">
+    <h2>📝 Exam</h2>
+
+    <form method="POST">
+        {% for q in questions %}
+        <div class="q">
+            <strong>{{ loop.index }}. {{ q.question }}</strong>
+
+            <label>
+                <input type="radio" name="{{ q.id }}" value="A" required>
+                {{ q.option_a }}
+            </label>
+
+            <label>
+                <input type="radio" name="{{ q.id }}" value="B">
+                {{ q.option_b }}
+            </label>
+
+            <label>
+                <input type="radio" name="{{ q.id }}" value="C">
+                {{ q.option_c }}
+            </label>
+
+            <label>
+                <input type="radio" name="{{ q.id }}" value="D">
+                {{ q.option_d }}
+            </label>
+        </div>
+        {% endfor %}
+
+        <button type="submit">Submit Exam</button>
+    </form>
+</div>
+
+</body>
+</html>

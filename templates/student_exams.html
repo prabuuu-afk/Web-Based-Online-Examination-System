@@ -50,7 +50,10 @@
             <p>⏱ Duration: {{ exam.duration }} minutes</p>
             <p>👤 Created by: {{ exam.created_by }}</p>
 
-            <a href="#" class="btn">Start Exam</a>
+            <a href="{{ url_for('start_exam', exam_id=exam.id) }}" class="btn">
+                Start Exam
+            </a>
+
         </div>
     {% endfor %}
 {% else %}
