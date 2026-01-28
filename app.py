@@ -152,6 +152,21 @@ def delete_student(sid):
     return redirect(url_for("view_students"))
 
 
+# ✅ THIS ROUTE WAS MISSING (FIX)
+@app.route("/staff/delete-all-students", methods=["POST"])
+def delete_all_students():
+    if "staff" not in session:
+        return redirect(url_for("staff_login"))
+
+    db = get_db()
+    db.execute("DELETE FROM students")
+    db.commit()
+    db.close()
+
+    flash("All students deleted successfully")
+    return redirect(url_for("view_students"))
+
+
 # ------------------ CREATE EXAM ------------------
 @app.route("/staff/create-exam", methods=["GET", "POST"])
 def create_exam():
@@ -166,7 +181,10 @@ def create_exam():
 
         db = get_db()
         db.execute(
-            "INSERT INTO exams (title, description, duration, created_by) VALUES (?, ?, ?, ?)",
+            """
+            INSERT INTO exams (title, description, duration, created_by)
+            VALUES (?, ?, ?, ?)
+            """,
             (title, description, duration, created_by)
         )
         db.commit()
@@ -176,6 +194,21 @@ def create_exam():
         return redirect(url_for("staff_dashboard"))
 
     return render_template("create_exam.html")
+
+
+# ------------------ DELETE EXAM ------------------
+@app.route("/staff/delete-exam/<int:exam_id>", methods=["POST"])
+def delete_exam(exam_id):
+    if "staff" not in session:
+        return redirect(url_for("staff_login"))
+
+    db = get_db()
+    db.execute("DELETE FROM exams WHERE id=?", (exam_id,))
+    db.commit()
+    db.close()
+
+    flash("Exam deleted successfully")
+    return redirect(url_for("staff_dashboard"))
 
 
 # ==================================================
@@ -222,7 +255,6 @@ def student_dashboard():
     )
 
 
-# ------------------ CHANGE PASSWORD (FIXED) ------------------
 @app.route("/student/change-password", methods=["GET", "POST"])
 def change_student_password():
     if "student" not in session:
@@ -262,7 +294,6 @@ def change_student_password():
     return render_template("change_student_password.html")
 
 
-# ------------------ STUDENT EXAMS ------------------
 @app.route("/student/exams")
 def student_exams():
     if "student" not in session:
