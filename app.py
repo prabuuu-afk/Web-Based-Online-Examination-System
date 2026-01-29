@@ -302,39 +302,6 @@ def student_exams():
     return render_template("student_exams.html", exams=exams)
 
 
-# ------------------ START EXAM ------------------
-@app.route("/student/exams/<int:exam_id>", methods=["GET", "POST"])
-def start_exam(exam_id):
-    if "student" not in session:
-        return redirect(url_for("student_login"))
-
-    db = get_db()
-    questions = db.execute(
-        "SELECT * FROM questions WHERE exam_id=?",
-        (exam_id,)
-    ).fetchall()
-
-    if request.method == "POST":
-        score = 0
-        for q in questions:
-            ans = request.form.get(str(q["id"]))
-            if ans == q["correct_option"]:
-                score += 1
-
-        db.execute(
-            "INSERT INTO results (student_id, exam_id, score, total) VALUES (?, ?, ?, ?)",
-            (session["student"], exam_id, score, len(questions))
-        )
-        db.commit()
-        db.close()
-
-        return redirect(url_for("result", exam_id=exam_id))
-
-    db.close()
-    return render_template("start_exam.html", questions=questions)
-
-
-# ------------------ RESULT ------------------
 @app.route("/student/result/<int:exam_id>")
 def result(exam_id):
     if "student" not in session:
@@ -379,7 +346,6 @@ def change_student_password():
     return render_template("change_student_password.html")
 
 
-# ------------------ LOGOUT ------------------
 @app.route("/logout")
 def logout():
     session.clear()
