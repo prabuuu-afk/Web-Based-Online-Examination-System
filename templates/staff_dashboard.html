@@ -114,7 +114,18 @@
         }
 
         .delete-btn:hover {
-            background: #c0392b;
+            background: #ff1900;
+        }
+        .ques-btn{
+            border: none;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            background-color: rgb(95, 95, 234);
+        }
+        .ques-btn:hover{
+            background: blue;
         }
     </style>
 </head>
@@ -186,10 +197,13 @@
             <td>{{ exam.duration }}</td>
             <td>{{ exam.created_by }}</td>
             <td>
-                <a href="{{ url_for('view_questions', exam_id=exam.id) }}"
+               <a href="{{ url_for('view_questions', exam_id=exam.id) }}"
                 style="padding:6px 10px;background:#27ae60;color:white;border-radius:6px;text-decoration:none;">
                     Questions
-                </a>
+                </a> 
+                <!--<form method="post" action="{{ url_for('view_questions', exam_id=exam.id) }}" style="display: inline;">
+                    <button class="ques-btn" type="submit">Questions</button>
+                </form>-->
 
                 <form method="POST"
                     action="{{ url_for('delete_exam', exam_id=exam.id) }}"
